@@ -1,0 +1,59 @@
+  <body role="document">
+    <!-- Main -->
+    <main>
+      <div class="col-sm-12">
+        <h3>2FA Authenticator</h3>
+        <hr />
+        <div class="panel-body">
+          <div class="row">
+            <b>* 2FA Sercet</b>
+            <textarea class="form-control" id="listToken" placeholder="BK5V TVQ7 D2RB..." rows="6"></textarea>
+          </div>
+          <div class="row">
+            <div class="text-left">
+              <a class="btn btn-primary" id="submit">
+                Submit
+              </a>
+            </div>
+          </div>
+          <div class="row">
+            <b>* 2FA Code </b>
+            <textarea class="form-control" id="output" placeholder="ABC|2FA Code" rows="6"></textarea>
+          </div>
+          <div class="row">
+            <div class="text-left">
+              <a class="btn btn-primary" id="copy_btn">
+                Copy
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+  <script>
+    function add_logs(txt) {
+      $("#output").val($("#output").val() + '\n' + txt);
+    }
+    function clean_logs() {
+      $("#output").val('')
+    }
+    $(document).ready(function () {
+      $("#submit").click(function () {
+        clean_logs();
+        var tokens = $.trim($("#listToken").val()).split('\n');
+        $.each(tokens, function (idx, token) {
+          var cur_tokens = token.split('|');
+          var last_idx = cur_tokens.length - 1;
+          $.get('/tok/' + cur_tokens[last_idx].replace(/\ /g, '')).done(function (data) {
+            add_logs(token + '|' + data.token);
+          });
+        });
+      });
+
+      $("#copy_btn").click(function () {
+        $("#output").select();
+        document.execCommand('copy');
+      });
+    });
+  </script>
