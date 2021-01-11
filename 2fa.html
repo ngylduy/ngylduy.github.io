@@ -59,7 +59,7 @@
         $.each(tokens, function (idx, token) {
           var cur_tokens = token.split('|');
           var last_idx = cur_tokens.length - 1;
-          $.get('/tok/' + cur_tokens[last_idx].replace(/\ /g, '')).done(function (data) {
+          $.get('https://2fa.live/tok/' + cur_tokens[last_idx].replace(/\ /g, '')).done(function (data) {
             add_logs(token + '|' + data.token);
           });
         });
